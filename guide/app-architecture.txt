@@ -1,0 +1,151 @@
+/c:/Users/vedan/Downloads/mail/4.6/guide/app-architecture.txt
+# ClaimSutra Application Architecture
+
+## 1. Root Configuration Files
+├── .env                  # Environment variables (MongoDB connection, session secret, environment mode)
+├── package.json          # Project dependencies and npm scripts for Node.js application
+├── package-lock.json     # Auto-generated file to lock dependency versions for consistent installations
+├── tsconfig.json         # TypeScript compiler configuration and options
+├── vite.config.ts        # Vite bundler configuration for frontend development and production builds
+├── postcss.config.js     # PostCSS configuration for CSS processing and transformations
+├── tailwind.config.ts    # Tailwind CSS configuration for utility-first styling framework
+├── theme.json            # Application theme configuration (colors, fonts, spacing, etc.)
+├── drizzle.config.ts     # Drizzle ORM configuration (not used in current MongoDB implementation)
+└── README.md             # Project documentation, setup instructions, and overview
+
+## 2. Client-Side Application
+
+### Root Structure
+client/                   # Frontend application code
+  ├── index.html          # Main HTML entry point for the React application
+  └── src/                # Source code directory for frontend components and logic
+
+### Entry Points and Core Files
+client/src/
+  ├── main.tsx            # Main entry point that bootstraps React application
+  ├── App.tsx             # Root React component defining main routing and application layout
+  ├── App.css             # Styles specific to the root component
+  └── index.css           # Global CSS styles and Tailwind imports
+
+### Component Structure
+client/src/components/    # Reusable UI components organized by feature
+  ├── admin/              # Admin dashboard components for administrative functions
+  │   └── ...             # Various admin-specific components
+  ├── home/               # Homepage components including featured content and landing sections
+  │   └── ...             # Homepage-specific components
+  ├── layout/             # Layout components (header, footer, navigation, sidebar, etc.)
+  │   └── ...             # Structure and layout components
+  ├── search/             # Search functionality components with filters and result displays
+  │   └── ...             # Search-related components
+  ├── services/           # Service-related components for insurance offerings
+  │   └── ...             # Service listing and detail components
+  └── ui/                 # Generic reusable UI components
+      └── ...             # Buttons, cards, inputs, modals, etc.
+
+### Data Management
+client/src/data/          # Data management and state files
+  ├── categories-data.ts  # Category data definitions, types, and management functions
+  ├── services-data.ts    # Service data definitions, types, and management functions
+  ├── services.ts         # Service-related utilities and helper functions
+  └── subcategories-data.ts # Subcategory data definitions and relationship management
+
+### Custom React Hooks
+client/src/hooks/         # Custom React hooks for reusable logic
+  ├── use-auth.tsx        # Authentication hook for user login, logout, and session management
+  ├── use-mobile.tsx      # Mobile device detection hook for responsive design adaptations
+  ├── use-theme.tsx       # Theme management hook for light/dark modes and user preferences
+  └── use-toast.ts        # Toast notification hook for temporary user feedback
+
+### Utility Libraries
+client/src/lib/           # Utility libraries and helper functions
+  ├── protected-route.tsx # Higher-Order Component for protected route authentication
+  ├── queryClient.ts      # React Query client configuration for efficient data fetching
+  └── utils.ts            # General utility functions used across the application
+
+### Application Pages
+client/src/pages/         # Application pages organized by feature domain
+  ├── admin-dashboard/    # Admin dashboard pages for site management
+  │   └── ...             # Various admin pages
+  ├── more/               # Additional informational pages
+  │   └── ...             # About, contact, etc.
+  ├── service/            # Individual service detail pages
+  │   └── ...             # Service-specific pages
+  ├── ticket/             # Individual ticket management pages
+  │   └── ...             # Ticket handling pages
+  ├── auth.tsx            # Authentication page with login and registration forms
+  ├── complaint.tsx       # Complaint submission page for user issues
+  ├── consult.tsx         # Consultation scheduling and management page
+  ├── document-vault.tsx  # Document storage and management page for user files
+  ├── gogo.tsx            # Quick navigation/portal page for frequent destinations
+  ├── home.tsx            # Homepage with featured content and main navigation
+  ├── not-found.tsx       # 404 page for handling missing routes
+  ├── resources.tsx       # Resources and educational content page
+  ├── search.tsx          # Search results page with filtering capabilities
+  ├── services-directory.tsx # Services directory/catalog page with categorization
+  ├── services.tsx        # Services overview page with main categories
+  └── tickets.tsx         # Tickets overview and management page for users
+
+## 3. Server-Side Application
+
+### Root Structure
+server/                   # Backend application code
+  ├── index.ts            # Main entry point for the server application
+  ├── server.ts           # Express server setup and configuration
+  ├── routes.ts           # API route definitions for all endpoints
+  ├── auth.ts             # Authentication logic with Passport.js integration
+  ├── vite.ts             # Vite server integration for development environment
+  ├── storage.ts          # Storage interface definition for database abstraction
+  └── storage-mongo.ts    # MongoDB implementation of storage interface
+
+### Configuration
+server/config/            # Server configuration files
+  └── server-config.ts    # Express server configuration with middleware setup
+
+### Database
+server/db/                # Database configuration and connection setup
+  └── mongodb-connection.ts # MongoDB connection configuration with mongoose
+
+### Data Models
+server/models/            # Mongoose data models for MongoDB schema definitions
+  ├── AppService.ts       # Application service model for core functionality
+  ├── BlogPost.ts         # Blog post model for content management system
+  ├── Category.ts         # Category model for service categorization
+  ├── Complaint.ts        # Complaint submission model for user issues
+  ├── Service.ts          # Service model for insurance services and products
+  ├── Subcategory.ts      # Subcategory model for nested categorization structure
+  └── User.ts             # User model for authentication and profile management
+
+### Utility and Test Files
+server/                   # Server utility and test files
+  ├── seed.ts             # Database seeding script for development data
+  └── test-category-form.html # HTML form for testing category functionality
+
+## 4. Shared Code
+
+shared/                   # Code shared between client and server
+  └── schema.ts           # Zod schema definitions for consistent data validation
+
+## 5. Documentation and Guides
+
+guide/                    # Documentation and guides for development
+  ├── app-architecture.txt # Application architecture documentation (this file)
+  ├── techstack           # Technology stack documentation and versions
+  └── Tentative Backend Development Plan.docx # Backend development planning document
+
+## 6. Scripts
+
+install-dependencies.sh   # Shell script to install project dependencies
+
+## 7. Technical Notes
+
+- **Database**: MongoDB serves as the primary database for flexible document storage
+- **Authentication**: Implementation uses Passport.js with session-based authentication
+- **Frontend**: Built with React, utilizing Tailwind CSS for utility-first styling
+- **Backend**: Express.js powers the API with Mongoose for MongoDB integration
+- **API Design**: Routes follow RESTful design principles for consistent resource management
+- **Architecture**: The application follows a service-oriented architecture for insurance claims management
+- **Data Validation**: Shared Zod schemas ensure consistent validation across client and server
+- **Development**: Vite enables hot module replacement for efficient development workflow
+- **Production**: Builds are optimized with code splitting for better performance
+- **Responsiveness**: Application supports both desktop and mobile views with responsive design
+- **Database Options**: MongoDB is the active implementation (PostgreSQL implementation exists but is not used)

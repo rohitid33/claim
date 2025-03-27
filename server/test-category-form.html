@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Category Creation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            white-space: pre-wrap;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Category Creation</h1>
+    
+    <div class="form-group">
+        <label for="categoryName">Category Name:</label>
+        <input type="text" id="categoryName" placeholder="Enter category name">
+    </div>
+    
+    <button id="createButton">Create Category</button>
+    <button id="testButton">Run Test Endpoint</button>
+    <button id="checkButton">Check Database</button>
+    <button id="clearButton">Clear Categories</button>
+    
+    <div id="result">Results will appear here...</div>
+    
+    <script>
+        document.getElementById('createButton').addEventListener('click', async () => {
+            const categoryName = document.getElementById('categoryName').value.trim();
+            if (!categoryName) {
+                document.getElementById('result').innerHTML = '<span class="error">Please enter a category name</span>';
+                return;
+            }
+            
+            try {
+                document.getElementById('result').innerHTML = 'Creating category...';
+                
+                const response = await fetch('/api/categories', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name: categoryName })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('result').innerHTML = `
+                        <span class="success">Category created successfully!</span>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    document.getElementById('result').innerHTML = `
+                        <span class="error">Error creating category:</span>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = `
+                    <span class="error">Error:</span>
+                    <pre>${error.message}</pre>
+                `;
+            }
+        });
+        
+        document.getElementById('testButton').addEventListener('click', async () => {
+            try {
+                document.getElementById('result').innerHTML = 'Running test endpoint...';
+                
+                const response = await fetch('/api/test-create-category');
+                const data = await response.json();
+                
+                document.getElementById('result').innerHTML = `
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                document.getElementById('result').innerHTML = `
+                    <span class="error">Error:</span>
+                    <pre>${error.message}</pre>
+                `;
+            }
+        });
+        
+        document.getElementById('checkButton').addEventListener('click', async () => {
+            try {
+                document.getElementById('result').innerHTML = 'Checking database...';
+                
+                const response = await fetch('/api/direct-db-check');
+                const data = await response.json();
+                
+                document.getElementById('result').innerHTML = `
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                document.getElementById('result').innerHTML = `
+                    <span class="error">Error:</span>
+                    <pre>${error.message}</pre>
+                `;
+            }
+        });
+        
+        document.getElementById('clearButton').addEventListener('click', async () => {
+            try {
+                document.getElementById('result').innerHTML = 'Clearing categories...';
+                
+                const response = await fetch('/api/categories/clear', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                document.getElementById('result').innerHTML = `
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                document.getElementById('result').innerHTML = `
+                    <span class="error">Error:</span>
+                    <pre>${error.message}</pre>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

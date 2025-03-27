@@ -1,0 +1,83 @@
+
+.nav-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #002B4E;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 50;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
+  padding: 8px 4px;
+  transition: all 0.2s ease;
+  text-align: center;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.nav-item:active {
+  opacity: 0.8;
+}
+
+.nav-item.active {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-icon {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.nav-label {
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  text-align: center;
+  line-height: 1;
+}
+
+/* Fix for Android input appearance */
+input[type="search"],
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+textarea {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 4px;
+  font-size: 16px; /* Prevents zoom on iOS */
+}
+
+/* Fix for Android button appearance */
+button {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Fix for Android scrolling */
+.scroll-container {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  scroll-behavior: smooth;
+}
+
+@keyframes blink-effect {
+  0% { opacity: 1; box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); }
+  50% { opacity: 0.8; box-shadow: 0 0 15px rgba(0, 123, 255, 0.8); }
+  100% { opacity: 1; box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); }
+}
+
+.blink-animation {
+  animation: blink-effect 1.5s infinite;
+}

@@ -1,0 +1,137 @@
+Implementation Plan for "Apply Now" Button Functionality
+I'll provide a detailed implementation approach following the steps you outlined:
+
+1. Locate the Service Component with the "Apply Now" Button
+Navigate to the client/src/components/services/ directory
+Look for files like ServiceDetail.tsx, ServiceCard.tsx, or similar
+Open the component file that contains the service details view
+Identify the JSX element containing the "Apply Now" button, which might look something like:
+<Button variant="primary2. Add Authentication Hook Import
+
+- At the top of the file, add this import statement:
+```typescript
+import { useAuth } from '../../hooks/use-auth';
+Copy
+Insert
+Apply
+Make sure the path is correct by verifying the relative location between the component and the hooks directory
+3. Implement the useAuth Hook in the Component
+Inside your component function, before the return statement, add:
+const { user, isAuthenticated } = useAuth();
+Copy
+Insert
+Apply
+This will extract the authentication state and user information from the auth hook
+The hook should be called at the function component's top level, not inside other functions or conditions
+4. Add Router Navigation Import
+Add the following import at the top of your file:
+import { useNavigate } from 'react-router-dom';
+Copy
+Insert
+Apply
+Inside your component function, before the return statement, add:
+const navigate = useNavigate();
+Copy
+Insert
+Apply
+5. Create the handleApplyNow Function
+Define a function inside your component:
+const handleApplyNow = () => {
+  if (isAuthenticated) {
+    // Will implement ticket creation logic here (Step 6)
+    console.log('User is authenticated, proceeding with ticket creation');
+  } else {
+    // Will implement redirect logic here (Step 7)
+    console.log('User is not authenticated, redirecting to login');
+  }
+};
+Copy
+Insert
+Apply
+6. For Authenticated Users Implementation
+Inside the if (isAuthenticated) block from step 5, add:
+// Get service data from props or wherever it's available in the component
+const ticketData = {
+  serviceId: service.id,
+  serviceName: service.name,
+  userId: user.id,
+  status: 'new',
+  createdAt: new Date(),
+  // Add any other relevant fields needed for the ticket
+};
+
+// Call the API function to create a ticket (this would be imported or defined elsewhere)
+createTicket(ticketData)
+  .then(response => {
+    // Show success message
+    toast.success('Application submitted successfully!');
+    // Optionally redirect to tickets page
+    navigate('/tickets');
+  })
+  .catch(error => {
+    // Show error message
+    toast.error('Failed to submit application. Please try again.');
+    console.error('Error creating ticket:', error);
+  });
+Copy
+Insert
+Apply
+7. For Unauthenticated Users Implementation
+Inside the else block from step 5, add:
+// Capture current service ID or full path for return URL
+const returnUrl = `/service/${service.id}`;
+// Redirect to auth page with return URL
+navigate(`/auth?returnUrl=${encodeURIComponent(returnUrl)}`);
+Copy
+Insert
+Apply
+8. Connect the handleApplyNow Function to the Button
+Find the "Apply Now" button in the JSX returned by your component
+Modify it to include the onClick handler:
+<Button 
+  variant="primary" 
+  onClick
+</Button>
+Copy
+Insert
+Apply
+Additional Implementation Notes:
+1'll need to either: - Import an existing API function from your client's API utilities - Create a new function that uses fetch or axios to make a POST request to your backend
+
+Toast Notifications:
+
+Import the toast utility:
+import { useToast } from '../../hooks/use-toast';
+Copy
+Insert
+Apply
+Initialize it in your component:
+const toast = useToast();
+Copy
+Insert
+Apply
+Loading State:
+
+Consider adding a loading state to prevent multiple submissions:
+const [isSubmitting, setIsSubmitting] = useState(false);
+Copy
+Insert
+Apply
+Update the button to show loading state:
+<Button 
+  
+  disabled={isSubmitting}
+>
+  {isSubmitting ? 'Submitting...' : 'Apply Now'}
+</Button>
+ Ensure your backend has an endpoint like:
+Copy
+Insert
+Apply
+POST /api/tickets
+
+- That accepts all the ticket data needed for creation
+Copy
+Insert
+Apply
+This implementation follows all the steps you outlined and provides the necessary detail to implement the "Apply Now" button functionality with authentication checking and ticket creation.

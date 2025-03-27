@@ -1,0 +1,10 @@
+Decide on a single database strategy (MongoDB or PostgreSQL) and remove the unused implementation
+Fix the syntax error in routes.ts
+Implement proper authentication for all endpoints
+Move sensitive information to environment variables
+Create a centralized error handling middleware
+Standardize the data models across the application
+Complete the PostgreSQL schema implementation if that's the chosen database
+Move dynamic imports to static imports
+Remove test and debug code from production
+Centralize configuration management
